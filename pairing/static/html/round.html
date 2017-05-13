@@ -1,1 +1,13 @@
-round.html
+<a ng-repeat="rnd in rounds" href="#!/rounds/{{ rnd.id }}/" class='btn btn-default'>{{ rnd.id }}</a>
+<button ng-click="add()" class='btn btn-primary'>Add</button>
+
+<div>
+  <table ng-if="results">
+   <thead><tr><th>Player1</th><th>Score</th><th>Player2</th><th>Score</th><th></th></tr></thead>
+   <tbody>
+    <tr ng-repeat="result in results">
+      <td>{{ result.player1,name}}</td>
+    </tr>
+   </tbody>
+  </table>
+</div>

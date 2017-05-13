@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView
 router = DefaultRouter()
 router.register('players', views.PlayerViewSet)
 router.register('results', views.ResultViewSet)
-router.register('rounds', views.RoundViewSet)
+router.register('rounds', views.RoundViewSet, base_name='rounds')
 router.register('standings', views.StandingViewSet)
 
 urlpatterns = [

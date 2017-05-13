@@ -19,8 +19,12 @@ app.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'static/html/round.html',
         controller: 'rounds-view',
     })
-
     .when('/results/:result_id', {
+        templateUrl: 'static/html/result.html',
+        controller: 'results-view',
+    })
+
+    .when('/results/', {
         templateUrl: 'static/html/result.html',
         controller: 'results-view',
     })
@@ -40,10 +44,12 @@ app.config(['$resourceProvider', function($resourceProvider) {
 app.factory('PlayerService', function($resource){
     return $resource('/api/players/:player_id',{player: "@player" });
 });
-app.factory('RoundsService', function($resource){
-    return $resource('/api/rounds/:round_id',{round: "@round" });
+app.factory('Rounds', function($resource){
+    return $resource('/api/rounds/:round_id',{round: "@round" },
+           {results: { method: 'GET', url: 'results' }}
+    );
 });
-app.factory('ResultsService', function($resource){
+app.factory('Results', function($resource){
     return $resource('/api/results/:result_id',{result: "@result" });
 });
 app.factory('StandingsService', function($resource){
@@ -79,9 +85,24 @@ app.controller('main', ['$scope','$http','PlayerService','$location',
     
 }]);
 
-app.controller('rounds-view', ['$scope', 'RoundsService','$routeParams', function ($scope, RoundsService, $routeParams) {
-    $scope.rounds = RoundsService.get({round_id: $routeParams.round_id});
-    console.log('rounds');
+app.controller('rounds-view', ['$scope', 'Rounds','$routeParams', function ($scope, Rounds, $routeParams) {
+    if ($routeParams.hasOwnProperty("round_id")) {
+    
+    }
+    else {
+        $scope.rounds = Rounds.query();
+    }
+    $scope.add = function () {
+        Rounds.save({},
+            function(response){
+                $scope.rounds.push(response)
+            },
+            function(err, response) {
+                console.log(err);
+                console.log(response);
+            }
+        );
+    };
 }]);
 
 app.controller('standings-view', ['$scope', 'StandingsService','$routeParams', function ($scope, StandingsService, $routeParams) {
@@ -89,7 +110,7 @@ app.controller('standings-view', ['$scope', 'StandingsService','$routeParams', f
     $scope.employee = StandingsService.get({standing_id: $routeParams.round_id});
 }]);
 
-app.controller('results-view', ['$scope', 'ResultsService','$routeParams', function ($scope, ResultsService, $routeParams) {
-console.log('results');
-    $scope.employee = ResultsService.get({result_id: $routeParams.round_id});
+app.controller('results-view', ['$scope', 'Results','$routeParams', function ($scope, Results, $routeParams) {
+    
+    $scope.results = Results.query({result_id: $routeParams.round_id});
 }]);

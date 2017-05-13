@@ -1,4 +1,4 @@
-from pairing.models import Player, Result, Round, Standing
+from pairing.models import Player, Result , Standing
 from rest_framework.serializers import ModelSerializer
 
 class PlayerSerializer(ModelSerializer):
@@ -13,15 +13,8 @@ class ResultSerializer(ModelSerializer):
         model = Result
         fields = '__all__'
         read_only_fields = ('id',)
-     
-
-class RoundSerializer(ModelSerializer):
-    class Meta:
-        model = Round
-        fields = '__all__'
-        read_only_fields = ('id',)
-
-
+        depth = 1
+        
 class StandingSerializer(ModelSerializer):
     class Meta:
         model = Standing
