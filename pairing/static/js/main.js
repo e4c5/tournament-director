@@ -45,12 +45,12 @@ app.factory('PlayerService', function($resource){
     return $resource('/api/players/:player_id',{player: "@player" });
 });
 app.factory('Rounds', function($resource){
-    return $resource('/api/rounds/:round_id',{round: "@round" },
-           {results: { method: 'GET', url: 'results' }}
-    );
+    return $resource('/api/rounds/:round_id',{round: "@id" });
 });
 app.factory('Results', function($resource){
-    return $resource('/api/results/:result_id',{result: "@result" });
+    return $resource('/api/results/:result_id',{result: "@result" },{
+        'update': { method:'PUT' }
+    });
 });
 app.factory('StandingsService', function($resource){
     return $resource('/api/standings/:standing_id',{standing: "@standing" });
@@ -78,20 +78,31 @@ app.controller('main', ['$scope','$http','PlayerService','$location',
         });
     };
 
-    $scope.members = function(team) {
-        $location.path("/players/" + player._id);
+    $scope.details = function(player) {
+        console.log(player);
     }
         
     
 }]);
 
 app.controller('rounds-view', ['$scope', 'Rounds','$routeParams', function ($scope, Rounds, $routeParams) {
-    if ($routeParams.hasOwnProperty("round_id")) {
+    $scope.rounds = Rounds.query();
+
+    $scope.details = function(round_id) {
+        Rounds.get({round_id: round_id },
+            function(response){
+                $scope.results = response.results;
+            },
+            function(err, response){
+                console.log(err);
+            }
+        );
+    }
+       
+    $scope.update = function(result) {
+        console.log(result);
+    }    
     
-    }
-    else {
-        $scope.rounds = Rounds.query();
-    }
     $scope.add = function () {
         Rounds.save({},
             function(response){

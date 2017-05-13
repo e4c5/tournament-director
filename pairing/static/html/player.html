@@ -17,8 +17,8 @@
       </th></tr>
  </thead>
  <tbody>
-   <tr ng-repeat="player in players | orderBy:sortColumn:sortReverse" ng-click="$parent.results(player)">
-     <td>{{ player.name }}</td><td>{{ player.rating + 0}}</td></tr>
+   <tr ng-repeat="player in players | orderBy:sortColumn:sortReverse" ng-click="$parent.details(player)">
+     <td>{{ player.name }}</td><td>{{ player.rating }}</td></tr>
  </tbody>
 </table>
 

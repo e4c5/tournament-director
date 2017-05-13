@@ -1,13 +1,25 @@
-<a ng-repeat="rnd in rounds" href="#!/rounds/{{ rnd.id }}/" class='btn btn-default'>{{ rnd.id }}</a>
+<button ng-repeat="rnd in rounds" ng-click="details(rnd.id)" class='btn btn-default'>{{ rnd.id }}</button>
 <button ng-click="add()" class='btn btn-primary'>Add</button>
 
-<div>
-  <table ng-if="results">
-   <thead><tr><th>Player1</th><th>Score</th><th>Player2</th><th>Score</th><th></th></tr></thead>
-   <tbody>
-    <tr ng-repeat="result in results">
-      <td>{{ result.player1,name}}</td>
-    </tr>
-   </tbody>
-  </table>
+<div  ng-if="results">
+   <div class='row'>
+	   <div class='col-xs-4'>Player1</div>
+	   <div class='col-xs-1'>Score1</div>
+	   <div class='col-xs-4'>Player2</div>
+	   <div class='col-xs-1'>Score1</div>
+   </div>
+   <div class='row' ng-repeat="result in results">
+      <div class='col-xs-4'>{{ result.player1.name}}</div>
+      <div class='col-xs-1'>
+        <input type="text" ng-model="result.score1" value="{{ result.score1 }}" class='form-control' />
+      </div>
+      <div class='col-xs-4'>{{ result.player2.name}}</div>
+      <div class='col-xs-1'>
+          <input type="text" ng-model="result.score2" value="{{ result.score2 }}"  class='form-control'/>
+      </div>
+      <div class='col-xs-1'>
+          <input type='hidden' ng-model='result.id' value='{{ result.id }}'/>
+          <input type="submit" class="btn btn-small" ng-click="$parent.update(result)"/>
+      </div>
+   </div>
 </div>

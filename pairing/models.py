@@ -5,8 +5,6 @@ class Player(models.Model):
     rating = models.IntegerField()
     
 class Result(models.Model):
-    ''' There will be a result object for each participant in a given round '''
-
     player1 = models.ForeignKey(Player, related_name='player1', on_delete=models.CASCADE)
     player2 = models.ForeignKey(Player, related_name='player2', on_delete = models.CASCADE)
     game  = models.IntegerField()

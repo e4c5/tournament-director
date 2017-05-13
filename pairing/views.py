@@ -12,6 +12,10 @@ class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
     
+    def retrieve(self, request, pk):
+        player = self.queryset.select_related('results').get(pk)
+        return Response(self.serializer_class(player))
+    
 class ResultViewSet(viewsets.ModelViewSet):
     queryset = Result.objects.all()
     serializer_class = ResultSerializer
@@ -23,7 +27,9 @@ class ResultViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
 class RoundViewSet(viewsets.ViewSet):
-    
+    '''
+    Isn't backed by a model. Rounds do not have a model
+    '''
     def create(self, request):
         if not utils.validate_players():
             return Response({'error': 'Odd number of players','code': 1}, status.HTTP_412_PRECONDITION_FAILED)
@@ -36,15 +42,15 @@ class RoundViewSet(viewsets.ViewSet):
         
         return Response({'status': 'OK'})
     
-    @list_route
-    def results(self, pk=None):
-        serializer = ResultSerializer(Result.objects.filter(round=pk))
-        return Response(serializer.data)
+    def retrieve(self, request, pk=None):
+        serializer = ResultSerializer(Result.objects.filter(game=pk), many=True)
+        return Response({'id': pk , 'results': serializer.data})
                                       
     def list(self, request):
         rnd = utils.get_current_round()+1
         
         return Response([{'id': i} for i in range(1, rnd)])
+    
     
 class StandingViewSet(viewsets.ModelViewSet):
     queryset = Standing.objects.all()
