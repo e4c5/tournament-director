@@ -8,8 +8,8 @@ from django.views.generic.base import TemplateView
 router = DefaultRouter()
 router.register('players', views.PlayerViewSet)
 router.register('results', views.ResultViewSet)
-router.register('round', views.RoundViewSet)
-router.register('standing', views.StandingViewSet)
+router.register('rounds', views.RoundViewSet)
+router.register('standings', views.StandingViewSet)
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='index.html')),
