@@ -24,7 +24,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
     
     def update(self, request, pk):
         Serial = self.get_serializer_class();
-        s = Serial(data=request.data)
+        s = Serial(self.queryset.get(pk=pk), data=request.data)
         if s.is_valid():
             s.save()
             
