@@ -4,31 +4,46 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from pairing.models import Player, Result, Standing
-from pairing.serializers import PlayerSerializer, ResultSerializer,\
-    StandingSerializer, ResultUpdateSerializer
+from pairing import serializers
      
 from pairing import utils
 from rest_framework.decorators import list_route
 
 class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
-    serializer_class = PlayerSerializer
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve': return serializers.PlayerDetailSerializer
+        else : return serializers.PlayerSerializer
     
     def retrieve(self, request, pk):
-        player = self.queryset.select_related('results').get(pk)
-        return Response(self.serializer_class(player))
+        player = self.queryset.get(pk=pk)
+        Serial = self.get_serializer_class()
+        
+        return Response(Serial(player).data)
     
-
+    def update(self, request, pk):
+        Serial = self.get_serializer_class();
+        s = Serial(data=request.data)
+        if s.is_valid():
+            s.save()
+            
+        return Response({'status':'OK'})
+    
 class ResultViewSet(viewsets.ModelViewSet):
     queryset = Result.objects.all()
-    serializer_class = ResultSerializer
+    serializer_class = serializers.ResultSerializer
     
     def list(self, request):
         '''
-        Returns the available results for the latest round
+        Returns results for the latest rounds.
+        
+        If results have not yet been entered, the scores will be null. And 
+        that gives you the draw for the next round!
         '''
+        
         rnd = utils.get_current_round()
-        qs = self.queryset.filter(game=rnd).exclude(score1=None)
+        qs = self.queryset.filter(game=rnd)
         serializer = self.serializer_class(qs,many=True)
         
         return Response(serializer.data)
@@ -37,7 +52,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         '''
         Note that we use a different serializer here
         '''
-        s = ResultUpdateSerializer(data=request.data)
+        s = serializers.ResultUpdateSerializer(data=request.data)
         if s.is_valid():
             Result.objects.filter( Q(player1__name=s.validated_data['player1']) & 
                                    Q(player2__name=s.validated_data['player2']) &
@@ -64,7 +79,7 @@ class RoundViewSet(viewsets.ViewSet):
         return Response({'status': 'OK'})
     
     def retrieve(self, request, pk=None):
-        serializer = ResultSerializer(Result.objects.filter(game=pk), many=True)
+        serializer = serializers.ResultSerializer(Result.objects.filter(game=pk), many=True)
         return Response({'id': pk , 'results': serializer.data})
                                       
     def list(self, request):
@@ -75,4 +90,4 @@ class RoundViewSet(viewsets.ViewSet):
     
 class StandingViewSet(viewsets.ModelViewSet):
     queryset = Standing.objects.all()
-    serializer_class = StandingSerializer
+    serializer_class = serializers.StandingSerializer

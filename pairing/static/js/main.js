@@ -42,7 +42,9 @@ app.config(['$resourceProvider', function($resourceProvider) {
 }]);
 
 app.factory('PlayerService', function($resource){
-    return $resource('/api/players/:player_id',{player: "@player" });
+    return $resource('/api/players/:player_id',{player: "@player" },{
+        'update': { method:'PUT' }
+    });
 });
 app.factory('Rounds', function($resource){
     return $resource('/api/rounds/:round_id',{round: "@id" });
@@ -64,6 +66,7 @@ app.controller('main', ['$scope','$http','PlayerService','$location',
     $scope.sortColumn = 'name'
     $scope.sortReverse = false;
 
+
     $scope.add = function () {
         PlayerService.save('/api/players', {'name': $scope.player.name, 'rating': $scope.player.rating},
             function(response){
@@ -72,17 +75,27 @@ app.controller('main', ['$scope','$http','PlayerService','$location',
         );
     };
 
+    $scope.details = function(player) {
+        $scope.current_player = PlayerService.get({player_id: player.id},function(response)
+        {
+            $scope.results = response.player1.concat(response.player2);
+        });
+    }
+
     $scope.remove = function (team) {
         PlayerService.remove({team_id: team._id}, function(response) {
             $scope.teams.splice($scope.teams.indexOf(team),1);
         });
     };
 
-    $scope.details = function(player) {
-        console.log(player);
-    }
-        
-    
+    $scope.update = function (player) {
+        PlayerService.save('/api/players', 
+            {'name': player.name, 'rating': player.rating, id: player.id},
+            function(response){
+                $scope.players.push(response)
+            }
+        );
+    };
 }]);
 
 app.controller('rounds-view', ['$scope', 'Rounds','$routeParams', function ($scope, Rounds, $routeParams) {

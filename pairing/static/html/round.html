@@ -1,26 +1,15 @@
 <button ng-repeat="rnd in rounds" ng-click="details(rnd.id)" class='btn btn-default'>{{ rnd.id }}</button>
 <button ng-click="add()" class='btn btn-primary'>Add Round</button>
 
-<div>
-  <table ng-if="results" class='table'>
-   <thead><tr><th>Player1</th><th>Score</th><th>Player2</th><th>Score</th><th></th></tr></thead>
-   <tbody>
-    <tr ng-repeat="result in results">
-      <td>{{ result.player1.name}}</td><td>{{ result.score1 }}</td>
-      <td>{{ result.player2.name}}</td><td>{{ result.score2 }}</td>
-      <td><button class='btn'><span  fa fa-icon fa-edit'></span></button></td>  
-    </tr>
-   </tbody>
-  </table>
-</div>
+<div ng-include="'/static/html/partial_result.html'"></div>
 
 <div>
-	<h2>Add result</h2>
-	<form class='form form-inline'>
+	<h2>Add Result</h2>
+	<form class='form-inline'>
 	   <input type'text' ng-model='result.player1.name' class='form-control' placeholder='Player 1'/>
 	   <input type'text' ng-model='result.score1'  class='form-control' placeholder='Score for Player 1'/>
-	   <input type'text' ng-model='result.player1.name' class='form-control' placeholder='Player 2'/>
-	   <input type'text' ng-model='result.score1'  class='form-control' placeholder='Score for Player 2'/>
+	   <input type'text' ng-model='result.player2.name' class='form-control' placeholder='Player 2'/>
+	   <input type'text' ng-model='result.score2'  class='form-control' placeholder='Score for Player 2'/>
 	   <button ng-click='add_result()' class='btn btn-primary'>Add</button>
 	</form>
 </div>

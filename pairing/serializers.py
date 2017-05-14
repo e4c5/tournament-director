@@ -8,11 +8,21 @@ class PlayerSerializer(serializers.ModelSerializer):
         model = Player
         fields = '__all__'
         read_only_fields = ('id',)
+        depth = 1
         
-
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
+        fields = '__all__'
+        read_only_fields = ('id',)
+        depth = 1
+
+class PlayerDetailSerializer(PlayerSerializer):
+    player1 = ResultSerializer(many=True, read_only=True)
+    player2 = ResultSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Player
         fields = '__all__'
         read_only_fields = ('id',)
         depth = 1

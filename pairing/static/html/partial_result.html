@@ -1,0 +1,10 @@
+  <table ng-if="results" class='table'>
+   <thead><tr><th>Player1</th><th>Score</th><th>Player2</th><th>Score</th><th></th></tr></thead>
+   <tbody>
+    <tr ng-repeat="result in results">
+      <td>{{ result.player1.name}}</td><td>{{ result.score1 }}</td>
+      <td>{{ result.player2.name}}</td><td>{{ result.score2 }}</td>
+      <td><i class="fa fa-icon fa-edit"></i></td>  
+    </tr>
+   </tbody>
+  </table>

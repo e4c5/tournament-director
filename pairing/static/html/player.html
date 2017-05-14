@@ -1,3 +1,13 @@
+<div ng-show='current_player'>Player Details
+    <form class='form'>
+        <input type="text" ng-model="current_player.name" placeholder="Player Name">
+        <input type="text" ng-model="current_player.rating" placeholder="Player Name">
+        <button ng-disabled="!current_player.name.length" ng-click="update()">Update</button>
+    </form>   
+	<div ng-include="'/static/html/partial_result.html'"></div>
+	
+</div>
+
 <table class='table'>
  <thead>
   <tr><th>
