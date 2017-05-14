@@ -1,25 +1,26 @@
 <button ng-repeat="rnd in rounds" ng-click="details(rnd.id)" class='btn btn-default'>{{ rnd.id }}</button>
-<button ng-click="add()" class='btn btn-primary'>Add</button>
+<button ng-click="add()" class='btn btn-primary'>Add Round</button>
 
-<div  ng-if="results">
-   <div class='row'>
-	   <div class='col-xs-4'>Player1</div>
-	   <div class='col-xs-1'>Score1</div>
-	   <div class='col-xs-4'>Player2</div>
-	   <div class='col-xs-1'>Score1</div>
-   </div>
-   <div class='row' ng-repeat="result in results">
-      <div class='col-xs-4'>{{ result.player1.name}}</div>
-      <div class='col-xs-1'>
-        <input type="text" ng-model="result.score1" value="{{ result.score1 }}" class='form-control' />
-      </div>
-      <div class='col-xs-4'>{{ result.player2.name}}</div>
-      <div class='col-xs-1'>
-          <input type="text" ng-model="result.score2" value="{{ result.score2 }}"  class='form-control'/>
-      </div>
-      <div class='col-xs-1'>
-          <input type='hidden' ng-model='result.id' value='{{ result.id }}'/>
-          <input type="submit" class="btn btn-small" ng-click="$parent.update(result)"/>
-      </div>
-   </div>
+<div>
+  <table ng-if="results" class='table'>
+   <thead><tr><th>Player1</th><th>Score</th><th>Player2</th><th>Score</th><th></th></tr></thead>
+   <tbody>
+    <tr ng-repeat="result in results">
+      <td>{{ result.player1.name}}</td><td>{{ result.score1 }}</td>
+      <td>{{ result.player2.name}}</td><td>{{ result.score2 }}</td>
+      <td><button class='btn'><span  fa fa-icon fa-edit'></span></button></td>  
+    </tr>
+   </tbody>
+  </table>
+</div>
+
+<div>
+	<h2>Add result</h2>
+	<form class='form form-inline'>
+	   <input type'text' ng-model='result.player1.name' class='form-control' placeholder='Player 1'/>
+	   <input type'text' ng-model='result.score1'  class='form-control' placeholder='Score for Player 1'/>
+	   <input type'text' ng-model='result.player1.name' class='form-control' placeholder='Player 2'/>
+	   <input type'text' ng-model='result.score1'  class='form-control' placeholder='Score for Player 2'/>
+	   <button ng-click='add_result()' class='btn btn-primary'>Add</button>
+	</form>
 </div>
