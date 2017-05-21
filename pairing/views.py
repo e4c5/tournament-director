@@ -8,6 +8,8 @@ from pairing import serializers
      
 from pairing import utils
 from rest_framework.decorators import list_route
+from django.db.models.deletion import ProtectedError
+from rest_framework.exceptions import APIException
 
 class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
@@ -29,7 +31,13 @@ class PlayerViewSet(viewsets.ModelViewSet):
             s.save()
             
         return Response({'status':'OK'})
-    
+
+    def destroy(self, request, pk):
+        try :
+            super(PlayerViewSet, self).destroy(request, pk)
+        except ProtectedError:
+            raise APIException(detail='Player has been paired and cannot be deleted')
+        
 class ResultViewSet(viewsets.ModelViewSet):
     queryset = Result.objects.all()
     serializer_class = serializers.ResultSerializer

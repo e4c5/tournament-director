@@ -11,6 +11,10 @@ app.config(['$routeProvider', function ($routeProvider) {
       templateUrl: 'static/html/player.html',
       controller: 'main'
     })
+    .when('/players/', {
+      templateUrl: 'static/html/player.html',
+      controller: 'main'
+    })
     .when('/rounds/:round_id/', {
         templateUrl: 'static/html/round.html',
         controller: 'rounds-view',
@@ -42,7 +46,7 @@ app.config(['$resourceProvider', function($resourceProvider) {
 }]);
 
 app.factory('PlayerService', function($resource){
-    return $resource('/api/players/:player_id',{player: "@player" },{
+    return $resource('/api/players/:player_id/',{player: "@player" },{
         'update': { method:'PUT' }
     });
 });
@@ -68,7 +72,7 @@ app.controller('main', ['$scope','$http','PlayerService','$location',
 
 
     $scope.add = function () {
-        PlayerService.save('/api/players', {'name': $scope.player.name, 'rating': $scope.player.rating},
+        PlayerService.save({'name': $scope.player.name, 'rating': $scope.player.rating},
             function(response){
                 $scope.players.push(response)
             }
@@ -82,17 +86,24 @@ app.controller('main', ['$scope','$http','PlayerService','$location',
         });
     }
 
-    $scope.remove = function (team) {
-        PlayerService.remove({team_id: team._id}, function(response) {
-            $scope.teams.splice($scope.teams.indexOf(team),1);
+    $scope.remove = function (player) {
+        PlayerService.remove({player_id: player.id}, function(response) {
+            $scope.players.splice($scope.players.indexOf(player),1);
         });
     };
 
-    $scope.update = function (player) {
-        PlayerService.save('/api/players', 
-            {'name': player.name, 'rating': player.rating, id: player.id},
+    $scope.update = function () {
+        PlayerService.update({player_id: $scope.current_player.id },
+            $scope.current_player,
             function(response){
-                $scope.players.push(response)
+                for (var i=0; i < $scope.players.length ; i++) {
+                    if ($scope.players[i].id == $scope.current_player.id) {
+                        $scope.players.splice(i,1);     
+                        break;               
+                    }
+                }
+                
+                $scope.players.push($scope.current_player);
             }
         );
     };

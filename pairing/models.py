@@ -5,8 +5,8 @@ class Player(models.Model):
     rating = models.IntegerField()
     
 class Result(models.Model):
-    player1 = models.ForeignKey(Player, related_name='player1', on_delete=models.CASCADE)
-    player2 = models.ForeignKey(Player, related_name='player2', on_delete = models.CASCADE)
+    player1 = models.ForeignKey(Player, related_name='player1', on_delete=models.PROTECT)
+    player2 = models.ForeignKey(Player, related_name='player2', on_delete=models.PROTECT)
     game  = models.IntegerField()
 
     score1 = models.IntegerField(null = True) # scored in this round
@@ -16,7 +16,7 @@ class Result(models.Model):
     score2_adjusted = models.IntegerField(null = True) # scored by opponent after applying penalties
     
 class Standing(models.Model):
-    player = models.ForeignKey(Player)
+    player = models.ForeignKey(Player, on_delete=models.PROTECT)
     game = models.IntegerField()
     wins = models.IntegerField() # 0 loss, 1 draw, 2 win
     margin = models.IntegerField()

@@ -1,4 +1,6 @@
-<div ng-show='current_player'>Player Details
+<div ng-show='current_player'>
+<h2>Player details - {{ current_player.name }}</h2>
+
     <form class='form'>
         <input type="text" ng-model="current_player.name" placeholder="Player Name">
         <input type="text" ng-model="current_player.rating" placeholder="Player Name">
@@ -8,7 +10,7 @@
 	
 </div>
 
-<table class='table'>
+<table class='table table-striped'>
  <thead>
   <tr><th>
          <span ng-click="sortColumn = 'name'; sortReverse = !sortReverse">
@@ -18,17 +20,19 @@
           </span>
       </th>
       <th>
-         <span ng-click="sortColumn = 'name'; sortReverse = !sortReverse">
+         <span ng-click="sortColumn = 'rating'; sortReverse = !sortReverse">
             Rating   
-            <span ng-show="sortColumn == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-            <span ng-show="sortColumn == 'name' && sortReverse" class="fa fa-caret-up"></span>
+            <span ng-show="sortColumn == 'rating' && !sortReverse" class="fa fa-caret-down"></span>
+            <span ng-show="sortColumn == 'rating' && sortReverse" class="fa fa-caret-up"></span>
           </span>
 
       </th></tr>
  </thead>
  <tbody>
    <tr ng-repeat="player in players | orderBy:sortColumn:sortReverse" ng-click="$parent.details(player)">
-     <td>{{ player.name }}</td><td>{{ player.rating }}</td></tr>
+     <td>{{ player.name }}</td><td>{{ player.rating }}</td>
+     <td><button ng-click='$parent.remove(player)' class='btn btn-default'><i class="fa fa-icon fa-trash"></button></td>
+     </tr>
  </tbody>
 </table>
 

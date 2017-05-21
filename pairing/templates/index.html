@@ -1,22 +1,23 @@
+<!DOCTYPE html>
 <html lang="en" ng-app="app">
  <head>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    
+    <meta charset="utf-8">
  </head>
   <body ng-controller="main">
    <div class='container'>
      <div class='row'>
        <div class='col-md-12'>
-       <h1>Tournament Direct</h1>
+       <h1>Tournament Director</h1>
        </div>
      </div>
      <div class='row'>
        <div class='col-md-12'>
          <ng-view></ng-view>
         <ul>
-	        <li class='btn'><a href="#!/players/1232322">Players</a></li>
+	        <li class='btn'><a href="#!/players/">Players</a></li>
 	        <li class='btn'><a href="#!/rounds/">Rounds</a></li>
 	        <li class='btn'><a href="#!/standings/">Standings</a></li>
 	        <li class='btn'><a href="#!/results/">Results</a></li>
