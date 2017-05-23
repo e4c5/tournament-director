@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from pairing.models import Player
 from pairing import utils
+from pairing.swiss import Pairing
+from _pydecimal import InvalidOperation
 
 class PairingTests(APITestCase):
     players = [ ['Leon Vidal',10],
@@ -36,6 +38,28 @@ class PairingTests(APITestCase):
         Player.objects.create(name='Bye', rating=0)
         self.assertTrue(utils.validate_players())
         self.assertTrue(utils.validate_results())
+        
+    def test_first_round(self):
+        players = []
+        for player in self.players:
+            players.append({'name': player[0], 'rating': player[1], 'score': 0, 'spread':0 })
+            
+        s = Pairing(1)
+        s.players = players
+        self.assertRaises(InvalidOperation)
+        
+        players.append({'name': 'bye', 'rating':0, 'score':0 , 'spread':0})
+        self.assertEquals(len(s.pairs),0)
+        s.make_it()
+        self.assertEquals(len(s.pairs),8)
+        
+        first = s.pairs[0]
+        self.assertEqual(first[0]['name'], 'bye')
+        self.assertEqual(first[1]['name'], 'Leon Vidal')
+        
+        last = s.pairs[1]
+        self.assertEqual(last[0]['name'], 'Peter Spillane')
+        self.assertEqual(last[1]['name'], 'Salman Patterson')
         
         
     

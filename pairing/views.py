@@ -34,7 +34,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk):
         try :
-            super(PlayerViewSet, self).destroy(request, pk)
+            return super(PlayerViewSet, self).destroy(request, pk)
         except ProtectedError:
             raise APIException(detail='Player has been paired and cannot be deleted')
         
